@@ -2,6 +2,7 @@ package a3.icecream.a3tutku385;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -26,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     TextView textAmount;
     TextView textDescription;
     TextView textPricePerScoop;
+    int inventory;
+    int a;
+    private int pos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +39,19 @@ public class MainActivity extends AppCompatActivity {
         textDescription=findViewById(R.id.tvDescription);
         textPricePerScoop=findViewById(R.id.tvPricePerScoop);
         editText=findViewById(R.id.editTextNumber);
+        Intent intent=getIntent();
+        a=intent.getIntExtra("position",-1);
+        inventory=intent.getIntExtra("remainingScoop",-1);
+        Log.d("pos","positin: "+a);
 
         this.iceCreamList=utils.getIceCreams();
-        getSelectedItem();
+        if(a==-1){
+            getSelectedItem();
+        }
+        else{
+            getSelectedItem(a);
+        }
+
 
     }
     public void placeOrder(View view){
@@ -63,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getSelectedItem(){
-       // this.iceCreamList=utils.getIceCreams();
         for (IceCream c: this.iceCreamList) {
             iceCreamFlavours.add(c.getFlavour());
         }
@@ -80,8 +93,9 @@ public class MainActivity extends AppCompatActivity {
                 String description=iceCreamList.get(i).getDescription();
                 int quantity=iceCreamList.get(i).getQuantity();
                 double scoopOfPrice=iceCreamList.get(i).getPrice();
-                textDescription.setText(description);
+                textDescription.setText(String.format("%s",description));
                 textAmount.setText(String.format("%d",quantity));
+
                 textPricePerScoop.setText(String.format("%.2f",scoopOfPrice));
             }
             @Override
@@ -90,6 +104,56 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void getSelectedItem(int pos){
+        //this.pos=pos;
+        // this.iceCreamList=
+        Log.d("pos","hereee: "+this.pos);
+        for (IceCream c: this.iceCreamList) {
+            iceCreamFlavours.add(c.getFlavour());
+        }
+        spIceCreamFlavours =  findViewById(R.id.spinner);
+        ArrayAdapter<String> flavoursAdapter = new ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_item,
+                iceCreamFlavours);
+        spIceCreamFlavours.setAdapter(flavoursAdapter);
+        spIceCreamFlavours.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("pos","hereee555: ");
+
+                if(a==i){
+                    itemSelected =(String) spIceCreamFlavours.getSelectedItem();
+                    String description=iceCreamList.get(a).getDescription();
+                    //int quantity=iceCreamList.get(a).getQuantity();
+                    double scoopOfPrice=iceCreamList.get(a).getPrice();
+                    textDescription.setText(String.format("%s",description));
+                    textAmount.setText(String.format("%d",inventory));
+                    textPricePerScoop.setText(String.format("%.2f",scoopOfPrice));
+
+                }
+                else{
+                    itemSelected =(String) spIceCreamFlavours.getSelectedItem();
+                    String description=iceCreamList.get(i).getDescription();
+                    int quantity=iceCreamList.get(i).getQuantity();
+                    double scoopOfPrice=iceCreamList.get(i).getPrice();
+                    textDescription.setText(String.format("%s",description));
+                    textAmount.setText(String.format("%d",quantity));
+                    textPricePerScoop.setText(String.format("%.2f",scoopOfPrice));
+                }
+                Log.d("pos","hereee6666: ");
+
+                Log.d("pos","hereee7777: ");
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
     public boolean checkAmount(View view){
         String reamingScoop=textAmount.getText().toString(); //get to number of remaining scoop
         Log.d("remain",reamingScoop);

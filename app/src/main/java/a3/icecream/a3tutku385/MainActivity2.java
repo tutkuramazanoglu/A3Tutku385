@@ -20,9 +20,8 @@ public class MainActivity2 extends AppCompatActivity {
     String getFlavour;
     String numScoop;
     int position;
-    private ArrayList<IceCream> iceCreamList;
+    ArrayList<IceCream> iceCreamList;
     Utills utils=new Utills();
-
 
 
     @Override
@@ -35,8 +34,8 @@ public class MainActivity2 extends AppCompatActivity {
         getFlavour=intent.getStringExtra("flavour");
         scoopPrice=intent.getStringExtra("scoopPrice");
         amount=intent.getStringExtra("remaining");
-        this.position=intent.getIntExtra("position",-1);
-        Log.d("pos","positin: "+position);
+        position=intent.getIntExtra("position",-1);
+
         textScoopNumb=findViewById(R.id.tvScoop);
         textScoopNumb.setText("Numb of Scoops: "+numScoop);
         textFlavour=findViewById(R.id.tvFlavour);
@@ -44,20 +43,37 @@ public class MainActivity2 extends AppCompatActivity {
         textScopePrice=findViewById(R.id.tvPrice);
         textScopePrice.setText("Price per Scoop: "+scoopPrice);
         totalPrice();
-        //updateNumbOfLeft();
+
     }
     public void orderAgain(View view){
         Intent i=new Intent(this,MainActivity.class);
+
+        //this.iceCreamList=this.utils.getIceCreams(updatedList());
+        int inventory=inventory();
+        //Log.d("left","it left"+a);
+        i.putExtra("position",position);
+        i.putExtra("remainingScoop",inventory);
+        Log.d("pos","positin: "+position);
         startActivity(i);
     }
-    public void updateNumbOfLeft(){
-        this.iceCreamList=this.utils.getIceCreams();
+//    public int inventory(){
+//        this.iceCreamList=this.utils.getIceCreams();
+//        int totalScoop=Integer.parseInt(amount);
+//        int requestScoop=Integer.parseInt(numScoop);
+//        int remainingScoop=totalScoop-requestScoop;
+//        iceCreamList.get(position).setQuantity(remainingScoop);
+//        int remaining=iceCreamList.get(this.position).getQuantity();
+//        Log.d("left","it left"+iceCreamList.get(position).getQuantity());
+//        Log.d("left","it left"+remaining);
+//        return  remaining;
+//
+//    }
+    public int inventory(){
         int totalScoop=Integer.parseInt(amount);
         int requestScoop=Integer.parseInt(numScoop);
         int remainingScoop=totalScoop-requestScoop;
-        this.iceCreamList.get(this.position).setQuantity(remainingScoop);
-        //int a=iceCreamList.get(this.position).getQuantity();
-        Log.d("left","it left"+iceCreamList.get(this.position).getQuantity());
+        return remainingScoop;
+
     }
     public void totalPrice()
     {
