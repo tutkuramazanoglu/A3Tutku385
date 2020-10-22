@@ -45,12 +45,13 @@ public class MainActivity extends AppCompatActivity {
         Log.d("pos","positin: "+a);
 
         this.iceCreamList=utils.getIceCreams();
-        if(a==-1){
-            getSelectedItem();
-        }
-        else{
-            getSelectedItem(a);
-        }
+        getSelectedItem();
+//        if(a==-1){
+//            getSelectedItem();
+//        }
+//        else{
+//            getSelectedItem(a);
+//        }
 
 
     }
@@ -95,61 +96,17 @@ public class MainActivity extends AppCompatActivity {
                 double scoopOfPrice=iceCreamList.get(i).getPrice();
                 textDescription.setText(String.format("%s",description));
                 textAmount.setText(String.format("%d",quantity));
-
                 textPricePerScoop.setText(String.format("%.2f",scoopOfPrice));
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+                if(a==-1 || a!=i){
 
-            }
-        });
-    }
-
-    public void getSelectedItem(int pos){
-        //this.pos=pos;
-        // this.iceCreamList=
-        Log.d("pos","hereee: "+this.pos);
-        for (IceCream c: this.iceCreamList) {
-            iceCreamFlavours.add(c.getFlavour());
-        }
-        spIceCreamFlavours =  findViewById(R.id.spinner);
-        ArrayAdapter<String> flavoursAdapter = new ArrayAdapter(
-                this,
-                android.R.layout.simple_spinner_item,
-                iceCreamFlavours);
-        spIceCreamFlavours.setAdapter(flavoursAdapter);
-        spIceCreamFlavours.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @SuppressLint("DefaultLocale")
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("pos","hereee555: ");
-
-                if(a==i){
-                    itemSelected =(String) spIceCreamFlavours.getSelectedItem();
-                    String description=iceCreamList.get(a).getDescription();
-                    //int quantity=iceCreamList.get(a).getQuantity();
-                    double scoopOfPrice=iceCreamList.get(a).getPrice();
-                    textDescription.setText(String.format("%s",description));
-                    textAmount.setText(String.format("%d",inventory));
-                    textPricePerScoop.setText(String.format("%.2f",scoopOfPrice));
-
+                textAmount.setText(String.format("%d",quantity));
                 }
                 else{
-                    itemSelected =(String) spIceCreamFlavours.getSelectedItem();
-                    String description=iceCreamList.get(i).getDescription();
-                    int quantity=iceCreamList.get(i).getQuantity();
-                    double scoopOfPrice=iceCreamList.get(i).getPrice();
-                    textDescription.setText(String.format("%s",description));
-                    textAmount.setText(String.format("%d",quantity));
-                    textPricePerScoop.setText(String.format("%.2f",scoopOfPrice));
+                    textAmount.setText(String.format("%d",inventory));
                 }
-                Log.d("pos","hereee6666: ");
-
-                Log.d("pos","hereee7777: ");
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
     }
@@ -158,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         String reamingScoop=textAmount.getText().toString(); //get to number of remaining scoop
         Log.d("remain",reamingScoop);
         String numScoop=editText.getText().toString(); //get the number of request to scoop
+
         Log.d("numb",numScoop);
     if(TextUtils.isEmpty(numScoop)){
             Toast toast=Toast.makeText(this,"You did not select any number of Scoop. Please select your number of scoop.",Toast.LENGTH_LONG);
@@ -167,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         else{
             int remaining=Integer.parseInt(reamingScoop);
             int number=Integer.parseInt(numScoop);
-            if(remaining<number){ //check empty
+            if(remaining<number || (int)number==0){ //check empty
                 Toast toast=Toast.makeText(this,"It left "+reamingScoop+". Please enter again.",Toast.LENGTH_LONG);
                 toast.show();
                 return false;
